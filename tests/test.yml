@@ -7,6 +7,7 @@
     ConfirmationURL: https://foo.com/confirmation_url
     ConsumerKey: "qVwFPfmAqboTYa1dpbKw02M8ZXUupq9H"
     ConsumerSecret: "wnCKbv42b3hdEO83"
+    SafaricomProd: false
 
   tasks:
 

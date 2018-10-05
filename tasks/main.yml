@@ -11,9 +11,13 @@
   with_items:
     - c2b_register_url
 
+- name: set safaricom endpoint
+  set_fact:
+        safaricom_url: "https://{% if SafaricomProd|bool %}api{% else %}sandbox{% endif %}.safaricom.co.ke"
+- debug: msg="{{safaricom_url}}"
 - name: Generate token
   uri:
-    url: "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    url: "{{safaricom_url}}/oauth/v1/generate?grant_type=client_credentials"
     method: GET
     user: "{{ ConsumerKey }}"
     password: "{{ ConsumerSecret }}"
@@ -24,7 +28,7 @@
 
 - name: register c2b
   uri:
-    url: "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
+    url: "{{safaricom_url}}/mpesa/c2b/v1/registerurl"
     method: POST
     status_code: 200
     body_format: json
