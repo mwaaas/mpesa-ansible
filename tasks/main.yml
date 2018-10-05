@@ -1,0 +1,36 @@
+---
+# tasks file for mpesa
+- name: Create build folder if does not exists
+  file:
+      path: "build"
+      state: directory
+
+- name: configure mpesa payloads
+  template: src={{role_path}}/templates/{{item}}.json.j2
+      dest=build/{{item}}.json
+  with_items:
+    - c2b_register_url
+
+- name: Generate token
+  uri:
+    url: "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    method: GET
+    user: "{{ ConsumerKey }}"
+    password: "{{ ConsumerSecret }}"
+    force_basic_auth: yes
+    status_code: 200
+    return_content: yes
+  register: token
+
+- name: register c2b
+  uri:
+    url: "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
+    method: POST
+    status_code: 200
+    body_format: json
+    headers:
+      Authorization: "Bearer {{token.json.access_token}}"
+    body: "{{ lookup('file','build/c2b_register_url.json') }}"
+  register: register_c2b
+
+- debug: msg="{{register_c2b}}"

@@ -1,0 +1,6 @@
+{
+    "ShortCode": "test",
+    "ResponseType": "Completed",
+    "ConfirmationURL": "https://foo/confirmation_url"
+        ,"ValidationURL": "https://foo/validation_url"
+    }
